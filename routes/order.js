@@ -8,7 +8,7 @@ router.post("/createorder", verifytoken, async (req, res) => {
         ProductsArray: req.body.ProductsArray,
         totalAmount: req.body.totalAmount,
         ordered_by: req.body.ordered_by,
-        delivery_date: req.body.delivery_date,
+        // delivery_date: req.body.delivery_date,
         delivery_status: req.body.delivery_status
     })
     try {
@@ -38,23 +38,54 @@ router.post("/createorder", verifytoken, async (req, res) => {
         res.status(500).json(error);
     }
 });
-// Dive.update({ _id: diveId }, { "$pull": { "divers": { "user": userIdToRemove } }}, { safe: true, multi:true }, function(err, obj) {
-//     //do something smart
-// });
 router.delete("/deleteorder", verifytoken, async (req, res) => {
     try {
         Order.findOneAndDelete({ 'id': Number(req.body.order_id) }).then(order => {
             console.log(order);
-            User.findOne({ 'id': Number(req.query.id) }).then(User_ => {
-                User_.orders.pull({ 'order_id': req.body.order_id, 'totalAmount': order.totalAmount, 'delivery_date':order.delivery_date, 'delivery_status': order.delivery_status, 'ProductsArray':order.ProductsArray });
-                // console.log(User)
-                User_.save()
+            User.updateOne({ id: Number(req.query.id) }, { "$pull": { "orders": { "order_id": req.body.order_id } } }, { safe: true, multi: true }, function (err, User_) {
+                console.log(User_)
+                if (User_.modifiedCount == 1) {
+                    res.status(200).json("Order deleted successfully");
+                }
+                else {
+                    res.status(500).json("Order not deleted");
+                }
 
-                    .then(Usr => res.json(Usr))
-                    .catch(err => console.log(err));
+            });
+        })
+            .catch(err => console.log(err));
 
-            }).catch(err => console.log(err));
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+router.put("/updateorder", verifytoken, async (req, res) => {
+    try {
+        Order.findOneAndUpdate({ 'id': Number(req.body.order_id) }, { $set: { delivery_status: req.body.delivery_status } }, { new: true }).then(order => {
+            console.log(order);
+            User.updateOne({ id: Number(req.query.id) }, { "$pull": { "orders": { "order_id": req.body.order_id } } }, { safe: true, multi: true }, function (err, User_) {
+                console.log(User_)
+                if (User_.modifiedCount == 1) {
+                    User.findOne({ 'id': Number(req.query.id) }).then(User => {
+                        User.orders.push({
+                            ProductsArray: order.ProductsArray,
+                            totalAmount: order.totalAmount,
+                            delivery_date: order.delivery_date,
+                            delivery_status: order.delivery_status,
+                            order_id: order.id
+                        });
+                        User.save()
+                            .then(User => res.json("Order updated successfully"))
+                            .catch(err => console.log(err));
 
+                    })
+                        .catch(err => console.log(err));
+                }
+                else {
+                    res.status(500).json("Order not updated");
+                }
+
+            });
         })
             .catch(err => console.log(err));
 

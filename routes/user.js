@@ -36,10 +36,6 @@ function verifyAdmin(req, res, next) {
     });
 }
 
-// create order
-// delete order
-// get all orders
-
 router.post("/register", async (req, res) => {
     const user_ = new User({
         name: req.body.name,
