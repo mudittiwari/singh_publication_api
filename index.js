@@ -6,7 +6,9 @@ const userRoute=require("./routes/user");
 // const authRoute=require("./routes/auth");
 const productRoute=require("./routes/product");
 const orderRoute=require("./routes/order");
+var cors = require('cors')
 
+app.use(cors())
 app.use(express.json());
 
 
@@ -18,14 +20,14 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log(e);
 });
 
-// app.use(function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-//     res.header(
-//       'Access-Control-Allow-Headers',
-//       'Origin, X-Requested-With, Content-Type, Accept'
-//     );
-//     next();
-//   });
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept'
+    );
+    next();
+  });
 app.use("/api/user/",userRoute);
 // app.use("/api/auth/",authRoute);
 app.use("/api/product/",productRoute);

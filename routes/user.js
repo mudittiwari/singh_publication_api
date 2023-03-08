@@ -38,7 +38,9 @@ function verifyAdmin(req, res, next) {
 
 router.post("/register", async (req, res) => {
     const user_ = new User({
-        name: req.body.name,
+        firstname: req.body.firstname,
+        dob: req.body.dob,
+        lastname: req.body.lastname,
         email: req.body.email,
         password: cryptojs.AES.encrypt(req.body.password, process.env.PASS_SEC).toString(),
         gender: req.body.gender,
@@ -46,11 +48,10 @@ router.post("/register", async (req, res) => {
         //   wishlist:[String],
         //   cart:[String],
         //   orders:[{type : mongoose.Schema.Types.ObjectId , ref : 'Order'}],
-        role: req.body.isadmin
     })
     try {
         const user = await user_.save();
-        res.status(201).json(user);
+        res.status(201).json("success");
 
     } catch (error) {
         console.log(error);
@@ -64,6 +65,7 @@ router.post("/login", async (req, res) => {
     const password = req.body.password;
     // console.log(req.body);
     const user = await User.findOne({ email: username });
+    console.log(user._doc)
     if (user) {
         // console.log(cryptojs.AES.decrypt(user.password,process.env.PASS_SEC).toString(cryptojs.enc.Utf8));
         if (cryptojs.AES.decrypt(user.password, process.env.PASS_SEC).toString(cryptojs.enc.Utf8) == password.toString()) {
