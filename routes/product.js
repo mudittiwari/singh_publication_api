@@ -10,13 +10,13 @@ const router = express.Router();
 
 function verifyAdmin(req, res, next) {
 
-    
+
     const token = req.headers['token'];
     console.log(token)
-    
+
     jwt.verify(token, process.env.JWT_SEC, (err, decoded) => {
 
-        
+
         if (err) {
 
             return res.status(401).json({ message: 'Unauthorized access' });
@@ -40,14 +40,30 @@ function verifyAdmin(req, res, next) {
 }
 
 
-router.post('/addproduct', verifyAdmin, async(req, res) => {
+router.post('/addproduct', verifyAdmin, async (req, res) => {
 
     const newProduct = new Product({
 
-        name: req.body.name,
-    price: req.body.price,
-    created_by: req.body.created_by,
-    image_url : req.body.image_url
+        title: req.body.title,
+        author: req.body.author,
+        publisher: req.body.publisher,
+        language: req.body.language,
+        paperback: req.body.paperback,
+        isbn: req.body.isbn,
+        isbn13: req.body.isbn13,
+        dimensions: req.body.dimensions,
+        file: req.body.file,
+        weight: req.body.weight,
+        age: req.body.age,
+        subtitle: req.body.subtitle,
+        category: req.body.category,
+        description: req.body.description,
+        rating: 0,
+        total_rating: 0,
+        reviews: [],
+        price: req.body.price,
+        created_by: "admin",
+        image_url: req.body.image_url
     });
 
     try {
@@ -61,30 +77,47 @@ router.post('/addproduct', verifyAdmin, async(req, res) => {
 });
 
 router.post('/updateproduct', verifyAdmin, (req, res) => {
-        Product.findOne({'id':Number(req.query.id)})
-            .then(product => {
-    
-                product.name = req.body.name;
-                product.price = req.body.price;
-                product.created_by = req.body.created_by;
-                product.image_url = req.body.image_url;
-    
-                product.save()
-                    .then(product => res.json(product))
-                    .catch(err => console.log(err));
-    
-            })
-            .catch(err => console.log(err));
-    
+    Product.findOne({ 'id': Number(req.query.id) })
+        .then(product => {
+
+            product.title = req.body.name;
+            product.author = req.body.author;
+            product.publisher = req.body.publisher;
+            product.language = req.body.language;
+            product.paperback = req.body.paperback;
+            product.isbn = req.body.isbn;
+            product.isbn13 = req.body.isbn13;
+            product.dimensions = req.body.dimensions;
+            product.file = req.body.file;
+            product.weight = req.body.weight;
+            product.age = req.body.age;
+
+            product.subtitle = req.body.subtitle;
+            product.category = req.body.category;
+            product.description = req.body.description;
+            product.rating = req.body.rating;
+            product.total_rating = req.body.total_rating;
+            product.reviews = req.body.reviews;
+            product.price = req.body.price;
+            product.created_by = req.body.created_by;
+            product.image_url = req.body.image_url;
+
+            product.save()
+                .then(product => res.json(product))
+                .catch(err => console.log(err));
+
+        })
+        .catch(err => console.log(err));
+
 });
 
 router.delete('/deleteproduct', verifyAdmin, (req, res) => {
     const productId = Number(req.query.id);
-    Product.deleteOne({'id': productId}, (err, doc) => {
+    Product.deleteOne({ 'id': productId }, (err, doc) => {
         if (err) {
-            res.status(500).json({"message":"Error deleting product"});
+            res.status(500).json({ "message": "Error deleting product" });
         } else {
-            res.status(200).json({"message":"Product deleted successfully"});
+            res.status(200).json({ "message": "Product deleted successfully" });
         }
     });
 
@@ -97,10 +130,9 @@ router.get('/getproducts', (req, res) => {
         .catch(err => console.log(err));
 
 });
-router.get('/products/:id', (req, res) => {
-
-    Product.findOne({'id':req.params.id})
-        .then(product => res.json(product))
+router.get('/products/', (req, res) => {
+    Product.findOne({ 'id': Number(req.query.id) })
+        .then((product) => { return res.json(product) })
         .catch(err => console.log(err));
 
 });

@@ -45,6 +45,8 @@ router.post("/register", async (req, res) => {
         password: cryptojs.AES.encrypt(req.body.password, process.env.PASS_SEC).toString(),
         gender: req.body.gender,
         phone_number: req.body.mobile,
+        billing_address:{'house':"",'area':"", 'city':"", 'street':"", 'pincode':""},
+        shipping_address:{'house':"",'area':"", 'city':"", 'street':"", 'pincode':""},
         //   wishlist:[String],
         //   cart:[String],
         //   orders:[{type : mongoose.Schema.Types.ObjectId , ref : 'Order'}],
@@ -90,9 +92,9 @@ router.post("/updateuser", verifytoken, async (req, res) => {
     User.findOne({ 'id': Number(req.query.id) })
         .then(User => {
 
-            User.name = req.body.name;
-            User.gender = req.body.gender;
-            User.phone_number = req.body.phone;
+            User.firstname = req.body.firstname;
+            User.lastname = req.body.lastname;
+            User.email = req.body.email;
             User.save()
                 .then(User => res.json(User))
                 .catch(err => console.log(err));
@@ -183,7 +185,43 @@ router.post("/removefromwishlist", verifytoken, async (req, res) => {
         .catch(err => console.log(err));
 });
 
-//create a router to get all the users
+router.post('/updatebillingaddress', verifytoken, async (req, res) => {
+    User.findOne({ 'id': Number(req.query.id) })
+        .then(User => {
+            // 'house':"",'area':"", 'city':"", 'street':"", 'pincode':""
+            let billing_address = {
+                'house': req.body.house,
+                'area': req.body.area,
+                'city': req.body.city,
+                'street': req.body.street,
+                'pincode': req.body.pincode
+            }
+            User.billing_address = billing_address;
+            User.save()
+                .then(User => res.json(User))
+                .catch(err => console.log(err));
+
+        })
+        .catch(err => console.log(err));
+});
+router.post('/updateshippingaddress', verifytoken, async (req, res) => {
+    User.findOne({ 'id': Number(req.query.id) })
+        .then(User => {
+            // 'house':"",'area':"", 'city':"", 'street':"", 'pincode':""
+            User.shipping_address.house=req.body.house;
+            User.shipping_address.area=req.body.area;
+            User.shipping_address.city=req.body.city;
+            User.shipping_address.street=req.body.street;
+            User.shipping_address.pincode=req.body.pincode;
+            User.save()
+                .then(User => res.json(User))
+                .catch(err => console.log(err));
+
+        })
+        .catch(err => console.log(err));
+});
+
+
 router.get("/getallusers", verifyAdmin, async (req, res) => {
     try {
         const users = await User.find();
@@ -201,6 +239,7 @@ router.get("/getuser", verifytoken, async (req, res) => {
         res.status(500).json(error);
     }
 });
+
 
 
 

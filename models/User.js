@@ -9,6 +9,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   gender: { type: String, required: true },
   phone_number:{type : Number,required:true,unique:true},
+  billing_address:{type:Object,required:true},
+  shipping_address:{type:Object,required:true},
   password: { type: String, required: true },
   dob:{type:Date,required:true},
   wishlist:[Number],
