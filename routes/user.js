@@ -208,11 +208,14 @@ router.post('/updateshippingaddress', verifytoken, async (req, res) => {
     User.findOne({ 'id': Number(req.query.id) })
         .then(User => {
             // 'house':"",'area':"", 'city':"", 'street':"", 'pincode':""
-            User.shipping_address.house=req.body.house;
-            User.shipping_address.area=req.body.area;
-            User.shipping_address.city=req.body.city;
-            User.shipping_address.street=req.body.street;
-            User.shipping_address.pincode=req.body.pincode;
+            let shipping_address = {
+                'house': req.body.house,
+                'area': req.body.area,
+                'city': req.body.city,
+                'street': req.body.street,
+                'pincode': req.body.pincode
+            }
+            User.shipping_address = shipping_address;
             User.save()
                 .then(User => res.json(User))
                 .catch(err => console.log(err));
