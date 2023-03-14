@@ -2,6 +2,7 @@ const express=require("express");
 const app=express();
 const mongoose=require("mongoose");
 const dotenv=require("dotenv");
+const cors = require('cors');
 const userRoute=require("./routes/user");
 // const authRoute=require("./routes/auth");
 const productRoute=require("./routes/product");
@@ -20,14 +21,9 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log(e);
 });
 
-app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://mudittiwari.github.io/singh_publications/');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept'
-    );
-    next();
-  });
+app.use(cors({
+  origin: 'https://mudittiwari.github.io'
+}));
 app.use("/api/user/",userRoute);
 // app.use("/api/auth/",authRoute);
 app.use("/api/product/",productRoute);
