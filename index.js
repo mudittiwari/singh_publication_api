@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 });
 
 app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://mudittiwari.github.io/');
+    res.header('Access-Control-Allow-Origin', 'https://mudittiwari.github.io/singh_publications/#/');
     res.header(
       'Access-Control-Allow-Headers',
       'Origin, X-Requested-With, Content-Type, Accept'
