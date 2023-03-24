@@ -37,6 +37,7 @@ function verifyAdmin(req, res, next) {
 }
 
 router.post("/register", async (req, res) => {
+    // console.log(req.body)
     const user_ = new User({
         firstname: req.body.firstname,
         dob: req.body.dob,

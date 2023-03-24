@@ -21,6 +21,7 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 });
 
 app.use(cors({
+//   origin: 'https://mudittiwari.github.io'
   origin: 'https://mudittiwari.github.io'
 }));
 app.use("/api/user/",userRoute);
