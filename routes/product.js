@@ -11,8 +11,8 @@ const router = express.Router();
 function verifyAdmin(req, res, next) {
 
 
-    const token = req.headers['token'];
-    console.log(token)
+    const authheader=req.headers.authorization;
+    const token=authheader && authheader.split(' ')[1];
 
     jwt.verify(token, process.env.JWT_SEC, (err, decoded) => {
 
