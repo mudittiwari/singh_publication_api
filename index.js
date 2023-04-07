@@ -20,10 +20,10 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log(e);
 });
 
-app.use(cors({
+// app.use(cors({
+// //   origin: 'https://mudittiwari.github.io'
 //   origin: 'https://mudittiwari.github.io'
-  origin: 'https://mudittiwari.github.io'
-}));
+// }));
 app.use("/api/user/",userRoute);
 // app.use("/api/auth/",authRoute);
 app.use("/api/product/",productRoute);
