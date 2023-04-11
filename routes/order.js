@@ -112,6 +112,7 @@ router.get("/getuserorders", verifytoken, async (req, res) => {
 router.get("/getallorders", verifytoken, async (req, res) => {
     try {
         const orders = await Order.find();
+        // console.log(orders);
         res.status(200).json(orders);
     } catch (error) {
         res.status(500).json(error);

@@ -8,7 +8,7 @@ const userRoute=require("./routes/user");
 const productRoute=require("./routes/product");
 const orderRoute=require("./routes/order");
 
-app.use(cors())
+// app.use(cors())
 app.use(express.json());
 
 
@@ -20,10 +20,10 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log(e);
 });
 
-// app.use(cors({
-// //   origin: 'https://mudittiwari.github.io'
+app.use(cors({
 //   origin: 'https://mudittiwari.github.io'
-// }));
+  origin: 'http://localhost:3000'
+}));
 app.use("/api/user/",userRoute);
 // app.use("/api/auth/",authRoute);
 app.use("/api/product/",productRoute);
@@ -31,7 +31,7 @@ app.use("/api/order/",orderRoute);
 
 
 
-app.listen(process.env.PORT || 5000,()=>{
+app.listen(process.env.PORT || 1234,()=>{
     console.log("backend server is running");
 
 })

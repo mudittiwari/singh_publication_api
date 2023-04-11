@@ -8,7 +8,8 @@ const { verifytoken } = require("../routes/verifyAccessToken");
 function verifyAdmin(req, res, next) {
 
     
-    const token = req.headers['token'];
+    const authheader=req.headers.authorization;
+    const token=authheader && authheader.split(' ')[1];
     console.log(token)
     
     jwt.verify(token, process.env.JWT_SEC, (err, decoded) => {
@@ -68,7 +69,8 @@ router.post("/login", async (req, res) => {
     const password = req.body.password;
     // console.log(req.body);
     const user = await User.findOne({ email: username });
-    console.log(user._doc)
+    // console.log(username)
+    // console.log(user._doc)
     if (user) {
         // console.log(cryptojs.AES.decrypt(user.password,process.env.PASS_SEC).toString(cryptojs.enc.Utf8));
         if (cryptojs.AES.decrypt(user.password, process.env.PASS_SEC).toString(cryptojs.enc.Utf8) == password.toString()) {

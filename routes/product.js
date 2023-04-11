@@ -10,10 +10,11 @@ const router = express.Router();
 
 function verifyAdmin(req, res, next) {
 
-
+    console.log(req.params)
+    // console.log(req.body)
     const authheader=req.headers.authorization;
     const token=authheader && authheader.split(' ')[1];
-
+    console.log(token)
     jwt.verify(token, process.env.JWT_SEC, (err, decoded) => {
 
 
@@ -77,10 +78,11 @@ router.post('/addproduct', verifyAdmin, async (req, res) => {
 });
 
 router.post('/updateproduct', verifyAdmin, (req, res) => {
+    // console.log()
     Product.findOne({ 'id': Number(req.query.id) })
         .then(product => {
 
-            product.title = req.body.name;
+            product.title = req.body.title;
             product.author = req.body.author;
             product.publisher = req.body.publisher;
             product.language = req.body.language;
