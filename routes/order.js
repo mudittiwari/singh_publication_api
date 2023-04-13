@@ -134,7 +134,7 @@ router.put("/updateorder", verifytoken, async (req, res) => {
 
 router.put("/updatedelivery", verifyAdmin, async (req, res) => {
     try {
-        Order.findOneAndUpdate({ 'id': Number(req.body.order_id) }, { $set: {"delivery_date":req.body.delivery_date } }, { new: true }).then(order => {
+        Order.findOneAndUpdate({ 'id': Number(req.body.order_id) }, { $set: { "delivery_status": req.body.delivery_status,"delivery_date":req.body.delivery_date } }, { new: true }).then(order => {
             console.log(order);
             User.updateOne({ 'email': req.body.useremail }, { "$pull": { "orders": { "order_id": req.body.order_id } } }, { safe: true, multi: true }, function (err, User_) {
                 console.log(User_)
