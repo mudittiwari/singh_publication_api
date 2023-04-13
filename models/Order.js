@@ -6,6 +6,7 @@ const OrderSchema = new mongoose.Schema({
   totalAmount: { type: Number, required: true },
   ordered_by:{ type: String, required: true },
   delivery_date:{ type : Date, default : Date.now},
+  invoice_file:{type : String , default : ""},
   delivery_status:{type : String , default : "Pending"}
 },{timestamps:true});
 let autoIncrement = 1;
