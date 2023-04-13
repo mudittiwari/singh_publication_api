@@ -5,7 +5,7 @@ const OrderSchema = new mongoose.Schema({
   ProductsArray: { type: Array, required: true },
   totalAmount: { type: Number, required: true },
   ordered_by:{ type: String, required: true },
-  delivery_date:{ type : Date, default : Date.now},
+  delivery_date:{ type : String, default : ""},
   invoice_file:{type : String , default : ""},
   delivery_status:{type : String , default : "Pending"}
 },{timestamps:true});
