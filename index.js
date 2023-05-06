@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 
 app.use(cors({
 //   origin: 'https://mudittiwari.github.io'
-origin:'http://singhpublication.in/'
+origin:'https://singhpublication.in'
 //   origin: 'http://localhost:3000'
 }));
 app.use("/api/user/",userRoute);
