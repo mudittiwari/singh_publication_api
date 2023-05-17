@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema({
     id: { type: Number, unique: true },
     // id: { type: mongoose.Schema.Types.ObjectId, unique: true, required: true },
     author: { type: String, required: true },
-    file: { type: String, required: true },
+    file: { type: String, default:"" },
     publisher: { type: String, required: true },
     language: { type: String, required: true },
     paperback: { type: Number, required: true },
