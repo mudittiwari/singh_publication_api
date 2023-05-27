@@ -246,7 +246,28 @@ router.get("/getuser", verifytoken, async (req, res) => {
     }
 });
 
-
+router.post('/updatepassword', verifytoken, async (req, res) => {
+    const user = await User.findOne({ 'id': Number(req.query.id) });
+    if(user)
+    {
+        const newpassword=req.body.newpassword;
+    const oldpassword=req.body.oldpassword;
+    let bytes  = cryptojs.AES.decrypt(user.password, process.env.PASS_SEC);
+    let originalText = bytes.toString(cryptojs.enc.Utf8);
+    if(originalText===oldpassword){
+        user.password = cryptojs.AES.encrypt(newpassword, process.env.PASS_SEC).toString();
+        user.save()
+        .then(User => res.status(200).json(User))
+        .catch(err => res.status(400).json(err));
+    }
+    else{
+        res.status(400).json("wrong password");
+    }
+    }
+    else{
+        res.status(400).json("user not found");
+    }
+});
 
 
 
