@@ -41,7 +41,7 @@ app.use("/api/order/",orderRoute);
 app.post('/contact', (req, res) => {
     let mailDetails = {
         from: 'muditpublication@gmail.com',
-        to: 'mudit19.072@gmail.com',
+        to: 'singhpublicationjaipur@gmail.com',
         subject: req.body.subject,
         text: `Name:${req.body.name}\nPhone:${req.body.phone}\nEmail:${req.body.email}\n`+req.body.message
     };
