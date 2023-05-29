@@ -4,7 +4,14 @@ const cryptojs = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const Product = require('../models/Product');
 const { verifytoken } = require("../routes/verifyAccessToken");
-
+const nodemailer = require('nodemailer');
+let mailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'muditpublication@gmail.com',
+        pass: 'kjkviqhqljvngoiz'
+    }
+});
 function verifyAdmin(req, res, next) {
 
     
@@ -267,6 +274,30 @@ router.post('/updatepassword', verifytoken, async (req, res) => {
     else{
         res.status(400).json("user not found");
     }
+});
+
+
+router.post('/forgetpassword', async(req, res) => {
+    console.log(req.body);
+    let email=req.body.email;
+    const user=await User.findOne({email:email});
+    if(user){
+    let password=user.password;
+    console.log(password);
+    let mailDetails = {
+        from: 'muditpublication@gmail.com',
+        to: email,
+        subject: "Reset Your Password",
+        text: `Click on the link to reset your password\nhttps://singhpublication.in/resetpassword/${password}`
+    };
+    mailTransporter.sendMail(mailDetails, function(err, data) {
+        if(err) {
+            res.status(500).json(err);
+        } else {
+            res.status(200).json("success");
+        }
+    });
+}
 });
 
 
