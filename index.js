@@ -31,7 +31,7 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 
 app.use(cors({
 //   origin: 'https://mudittiwari.github.io'
-origin:['https://singhpublication.in','https://mudittiwari.github.io','http://localhost:3000']
+origin:['https://singhpublication.in','https://mudittiwari.github.io','http://localhost:3000','https://singhpublications.vercel.app/']
 //   origin: 'http://localhost:3001'
 }));
 app.use("/api/user/",userRoute);
