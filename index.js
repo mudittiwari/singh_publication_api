@@ -17,7 +17,7 @@ let mailTransporter = nodemailer.createTransport({
 const productRoute=require("./routes/product");
 const orderRoute=require("./routes/order");
 
-app.use(cors())
+//app.use(cors())
 app.use(express.json());
 
 
@@ -29,11 +29,11 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log(e);
 });
 
-//app.use(cors({
+app.use(cors({
 //   origin: 'https://mudittiwari.github.io'
 //origin:['https://singhpublication.in','https://mudittiwari.github.io','http://localhost:3000','https://singhpublications.vercel.app/']
-   //origin: '*'
-//}));
+   origin: '*'
+}));
 app.use("/api/user/",userRoute);
 // app.use("/api/auth/",authRoute);
 app.use("/api/product/",productRoute);
