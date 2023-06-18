@@ -276,30 +276,66 @@ router.post('/updatepassword', verifytoken, async (req, res) => {
     }
 });
 
+router.post('/resetpassword', async (req, res) => {
+    console.log(req.body.email);
+    const user = await User.findOne({ 'email': req.body.email });
+    if(user)
+    {
+    const newpassword=req.body.newpassword;
+    user.password = cryptojs.AES.encrypt(newpassword, process.env.PASS_SEC).toString();
+    user.save()
+    .then(User => res.status(200).json(User))
+    .catch(err => res.status(400).json(err));
+    }
+    else{
+        res.status(400).json("user not found");
+    }
+});
+
 
 router.post('/forgetpassword', async(req, res) => {
     console.log(req.body);
     let email=req.body.email;
     const user=await User.findOne({email:email});
     if(user){
-    let password=user.password;
-    console.log(password);
+    let otp = Math.floor(100000 + Math.random() * 900000);
+    console.log(otp);
     let mailDetails = {
         from: 'muditpublication@gmail.com',
         to: email,
-        subject: "Reset Your Password",
-        text: `Click on the link to reset your password\nhttps://singhpublication.in/resetpassword/${password}`
+        subject: "Email Verification for Singh Publication",
+        text: `Your OTP for email verification is ${otp}`
     };
     mailTransporter.sendMail(mailDetails, function(err, data) {
         if(err) {
             res.status(500).json(err);
         } else {
-            res.status(200).json("success");
+            res.status(200).json(otp);
         }
     });
 }
 });
 
+router.post("/signupverification", async (req, res) => {
+    const email = req.body.email;
+    // console.log(email);
+    let otp = Math.floor(100000 + Math.random() * 900000);
+    console.log(otp);
+    let mailDetails = {
+        from: 'muditpublication@gmail.com',
+        to: email,
+        subject: "Email Verification for Singh Publication",
+        text: `Your OTP for email verification is ${otp}`
+    };
+    mailTransporter.sendMail(mailDetails, function(err, data) {
+        if(err) {
+            res.status(500).json(err);
+        } else {
+            res.status(200).json(otp);
+        }
+    });
+    
+});
 
 
 module.exports = router
