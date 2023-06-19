@@ -187,6 +187,7 @@ router.put("/updateinvoice", verifyAdmin, async (req, res) => {
                             totalAmount: order.totalAmount,
                             delivery_date: order.delivery_date,
                             delivery_status: order.delivery_status,
+                            delivery_address: order.delivery_address,
                             order_id: order.id,
                             invoice_file: order.invoice_file
                         });
