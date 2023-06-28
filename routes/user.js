@@ -14,14 +14,14 @@ let mailTransporter = nodemailer.createTransport({
 });
 function verifyAdmin(req, res, next) {
 
-    
-    const authheader=req.headers.authorization;
-    const token=authheader && authheader.split(' ')[1];
+
+    const authheader = req.headers.authorization;
+    const token = authheader && authheader.split(' ')[1];
     console.log(token)
-    
+
     jwt.verify(token, process.env.JWT_SEC, (err, decoded) => {
 
-        
+
         if (err) {
 
             return res.status(401).json({ message: 'Unauthorized access' });
@@ -54,14 +54,27 @@ router.post("/register", async (req, res) => {
         password: cryptojs.AES.encrypt(req.body.password, process.env.PASS_SEC).toString(),
         gender: req.body.gender,
         phone_number: req.body.mobile,
-        billing_address:{'house':"",'area':"", 'city':"", 'street':"", 'pincode':""},
-        shipping_address:{'house':"",'area':"", 'city':"", 'street':"", 'pincode':""},
+        billing_address: { 'house': "", 'area': "", 'city': "", 'street': "", 'pincode': "" },
+        shipping_address: { 'house': "", 'area': "", 'city': "", 'street': "", 'pincode': "" },
         //   wishlist:[String],
         //   cart:[String],
         //   orders:[{type : mongoose.Schema.Types.ObjectId , ref : 'Order'}],
     })
     try {
         const user = await user_.save();
+        let mailDetails = {
+            from: 'muditpublication@gmail.com',
+            to: req.body.email,
+            subject: "Signup Successful",
+            text: `Your account has been created successfully on Singh Publication.`
+        };
+        mailTransporter.sendMail(mailDetails, function (err, data) {
+            if (err) {
+                res.status(500).json(err);
+            } else {
+                res.status(200).json(otp);
+            }
+        });
         res.status(201).json("success");
 
     } catch (error) {
@@ -70,6 +83,9 @@ router.post("/register", async (req, res) => {
     }
 
 });
+
+
+
 
 router.post("/login", async (req, res) => {
     const username = req.body.email;
@@ -225,6 +241,7 @@ router.post('/updateshippingaddress', verifytoken, async (req, res) => {
                 'street': req.body.street,
                 'pincode': req.body.pincode
             }
+            // console.log(User);
             User.shipping_address = shipping_address;
             User.save()
                 .then(User => res.json(User))
@@ -255,23 +272,22 @@ router.get("/getuser", verifytoken, async (req, res) => {
 
 router.post('/updatepassword', verifytoken, async (req, res) => {
     const user = await User.findOne({ 'id': Number(req.query.id) });
-    if(user)
-    {
-        const newpassword=req.body.newpassword;
-    const oldpassword=req.body.oldpassword;
-    let bytes  = cryptojs.AES.decrypt(user.password, process.env.PASS_SEC);
-    let originalText = bytes.toString(cryptojs.enc.Utf8);
-    if(originalText===oldpassword){
-        user.password = cryptojs.AES.encrypt(newpassword, process.env.PASS_SEC).toString();
-        user.save()
-        .then(User => res.status(200).json(User))
-        .catch(err => res.status(400).json(err));
+    if (user) {
+        const newpassword = req.body.newpassword;
+        const oldpassword = req.body.oldpassword;
+        let bytes = cryptojs.AES.decrypt(user.password, process.env.PASS_SEC);
+        let originalText = bytes.toString(cryptojs.enc.Utf8);
+        if (originalText === oldpassword) {
+            user.password = cryptojs.AES.encrypt(newpassword, process.env.PASS_SEC).toString();
+            user.save()
+                .then(User => res.status(200).json(User))
+                .catch(err => res.status(400).json(err));
+        }
+        else {
+            res.status(400).json("wrong password");
+        }
     }
-    else{
-        res.status(400).json("wrong password");
-    }
-    }
-    else{
+    else {
         res.status(400).json("user not found");
     }
 });
@@ -279,41 +295,40 @@ router.post('/updatepassword', verifytoken, async (req, res) => {
 router.post('/resetpassword', async (req, res) => {
     console.log(req.body.email);
     const user = await User.findOne({ 'email': req.body.email });
-    if(user)
-    {
-    const newpassword=req.body.newpassword;
-    user.password = cryptojs.AES.encrypt(newpassword, process.env.PASS_SEC).toString();
-    user.save()
-    .then(User => res.status(200).json(User))
-    .catch(err => res.status(400).json(err));
+    if (user) {
+        const newpassword = req.body.newpassword;
+        user.password = cryptojs.AES.encrypt(newpassword, process.env.PASS_SEC).toString();
+        user.save()
+            .then(User => res.status(200).json(User))
+            .catch(err => res.status(400).json(err));
     }
-    else{
+    else {
         res.status(400).json("user not found");
     }
 });
 
 
-router.post('/forgetpassword', async(req, res) => {
+router.post('/forgetpassword', async (req, res) => {
     console.log(req.body);
-    let email=req.body.email;
-    const user=await User.findOne({email:email});
-    if(user){
-    let otp = Math.floor(100000 + Math.random() * 900000);
-    console.log(otp);
-    let mailDetails = {
-        from: 'muditpublication@gmail.com',
-        to: email,
-        subject: "Email Verification for Singh Publication",
-        text: `Your OTP for email verification is ${otp}`
-    };
-    mailTransporter.sendMail(mailDetails, function(err, data) {
-        if(err) {
-            res.status(500).json(err);
-        } else {
-            res.status(200).json(otp);
-        }
-    });
-}
+    let email = req.body.email;
+    const user = await User.findOne({ email: email });
+    if (user) {
+        let otp = Math.floor(100000 + Math.random() * 900000);
+        console.log(otp);
+        let mailDetails = {
+            from: 'muditpublication@gmail.com',
+            to: email,
+            subject: "Email Verification for Singh Publication",
+            text: `Your OTP for email verification is ${otp}`
+        };
+        mailTransporter.sendMail(mailDetails, function (err, data) {
+            if (err) {
+                res.status(500).json(err);
+            } else {
+                res.status(200).json(otp);
+            }
+        });
+    }
 });
 
 router.post("/signupverification", async (req, res) => {
@@ -327,14 +342,14 @@ router.post("/signupverification", async (req, res) => {
         subject: "Email Verification for Singh Publication",
         text: `Your OTP for email verification is ${otp}`
     };
-    mailTransporter.sendMail(mailDetails, function(err, data) {
-        if(err) {
+    mailTransporter.sendMail(mailDetails, function (err, data) {
+        if (err) {
             res.status(500).json(err);
         } else {
             res.status(200).json(otp);
         }
     });
-    
+
 });
 
 
