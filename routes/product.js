@@ -113,6 +113,8 @@ router.post('/updateproduct', verifyAdmin, (req, res) => {
 
 });
 
+
+
 router.delete('/deleteproduct', verifyAdmin, (req, res) => {
     const productId = Number(req.query.id);
     Product.deleteOne({ 'id': productId }, (err, doc) => {

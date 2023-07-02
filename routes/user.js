@@ -353,6 +353,34 @@ router.post("/signupverification", async (req, res) => {
 });
 
 
+
+router.post('/addreview',verifytoken,async(req,res)=>{
+    let id=req.body.id;
+    let review=req.body.review;
+    let username=req.body.username;
+    let rating=req.body.rating;
+    Product.findOne({'id':Number(id)}).then(product=>{
+        if(product){
+            let new_review={
+                'username':username,
+                'review':review
+            }
+            if(rating && rating>0 && rating<=5){
+                product.rating=((product.rating*product.total_rating)+rating)/(product.total_rating+1);
+                product.total_rating+=1;
+            }
+            product.reviews.push(new_review);
+            product.save()
+            .then(product => res.json(product))
+            .catch(err => res.json(err));
+        }
+        else{
+            res.status(400).json("product not found");
+        }
+    }).catch(err=>res.json(err));
+});
+
+
 module.exports = router
 
 // mongoose not creating unique _id field in mongodb
