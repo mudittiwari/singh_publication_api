@@ -38,7 +38,7 @@ app.use("/api/user/",userRoute);
 // app.use("/api/auth/",authRoute);
 app.use("/api/product/",productRoute);
 app.use("/api/order/",orderRoute);
-app.post('/contact', (req, res) => {
+app.post('/api/contact', (req, res) => {
     let mailDetails = {
         from: 'muditpublication@gmail.com',
         to: 'singhpublicationjaipur@gmail.com',
