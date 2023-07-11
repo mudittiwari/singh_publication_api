@@ -42,6 +42,7 @@ router.post("/createorder", verifytoken, async (req, res) => {
         totalAmount: req.body.totalAmount,
         ordered_by: req.body.ordered_by,
         delivery_address: req.body.delivery_address,
+        billing_address:req.body.billing_address,
         // delivery_date: req.body.delivery_date,
         delivery_status: req.body.delivery_status,
         invoice_file: "",
@@ -56,6 +57,7 @@ router.post("/createorder", verifytoken, async (req, res) => {
                     delivery_status: req.body.delivery_status,
                     order_id: order.id,
                     delivery_address: req.body.delivery_address,
+                    billing_address:req.body.billing_address,
                     invoice_file: "",
                 });
                 User.save()
@@ -110,6 +112,7 @@ router.put("/updateorder", verifytoken, async (req, res) => {
                             delivery_date: order.delivery_date,
                             delivery_status: order.delivery_status,
                             delivery_address: order.delivery_address,
+                            billing_address:order.billing_address,
                             order_id: order.id,
                             invoice_file: order.invoice_file
                         });
@@ -149,6 +152,7 @@ router.put("/updatedelivery", verifyAdmin, async (req, res) => {
                             delivery_date: order.delivery_date,
                             delivery_status: order.delivery_status,
                             delivery_address: order.delivery_address,
+                            billing_address:order.billing_address,
                             order_id: order.id,
                             invoice_file: order.invoice_file
                         });
@@ -188,6 +192,7 @@ router.put("/updateinvoice", verifyAdmin, async (req, res) => {
                             delivery_date: order.delivery_date,
                             delivery_status: order.delivery_status,
                             delivery_address: order.delivery_address,
+                            billing_address:order.billing_address,
                             order_id: order.id,
                             invoice_file: order.invoice_file
                         });
