@@ -9,6 +9,7 @@ const OrderSchema = new mongoose.Schema({
   invoice_file:{type : String , default : ""},
   delivery_status:{type : String , default : "Pending"},
   delivery_address:{type : String ,required:true},
+  billing_address:{type : String ,required:true},
 },{timestamps:true});
 let autoIncrement = 1;
 
