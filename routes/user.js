@@ -9,7 +9,7 @@ let mailTransporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'muditpublication@gmail.com',
-        pass: 'kjkviqhqljvngoiz'
+        pass: 'gggiibhxdwbofwxv'
     }
 });
 function verifyAdmin(req, res, next) {
@@ -63,7 +63,7 @@ router.post("/register", async (req, res) => {
     try {
         const user = await user_.save();
         let mailDetails = {
-            from: 'muditpublication@gmail.com',
+            from: 'singhpublicationjaipur@gmail.com',
             to: req.body.email,
             subject: "Signup Successful",
             text: `Your account has been created successfully on Singh Publication.`
@@ -316,7 +316,7 @@ router.post('/forgetpassword', async (req, res) => {
         let otp = Math.floor(100000 + Math.random() * 900000);
         console.log(otp);
         let mailDetails = {
-            from: 'muditpublication@gmail.com',
+            from: 'singhpublicationjaipur@gmail.com',
             to: email,
             subject: "Email Verification for Singh Publication",
             text: `Your OTP for email verification is ${otp}`
@@ -337,7 +337,7 @@ router.post("/signupverification", async (req, res) => {
     let otp = Math.floor(100000 + Math.random() * 900000);
     console.log(otp);
     let mailDetails = {
-        from: 'muditpublication@gmail.com',
+        from: 'singhpublicationjaipur@gmail.com',
         to: email,
         subject: "Email Verification for Singh Publication",
         text: `Your OTP for email verification is ${otp}`
