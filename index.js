@@ -42,8 +42,16 @@ const couponurls=[
     {url:"https://singhpublications.in/#/applycoupon/CN6OVP",book:'E-Book'},
     {url:"https://singhpublications.in/#/applycoupon/L7DJ3U",book:'E-Book'},
     {url:"https://singhpublications.in/#/applycoupon/KVH20F",book:'E-Book'},
+    {url:"https://singhpublications.in/#/applycoupon/M8BDIZ",book:'E-Book'},
+    {url:"https://singhpublications.in/#/applycoupon/B7PGQS",book:'E-Book'},
+    {url:"https://singhpublications.in/#/applycoupon/LCHXBI",book:'E-Book'},
+    {url:"https://singhpublications.in/#/applycoupon/0E5CBZ",book:'E-Book'},
+    {url:"https://singhpublications.in/#/applycoupon/GRPNSO",book:'E-Book'},
+    {url:"https://singhpublications.in/#/applycoupon/HIPRMF",book:'E-Book'},
+    {url:"https://singhpublications.in/#/applycoupon/89BI4O",book:'E-Book'},
+    {url:"https://singhpublications.in/#/applycoupon/SYR731",book:'E-Book'},
+    {url:"https://singhpublications.in/#/applycoupon/IZ4376",book:'E-Book'},
 ]
-
 function initializecupons()
 {
     Coupon.deleteMany({}).then((res)=>{
