@@ -12,8 +12,8 @@ function verifyAdmin(req, res, next) {
 
     console.log(req.params)
     // console.log(req.body)
-    const authheader=req.headers.authorization;
-    const token=authheader && authheader.split(' ')[1];
+    const authheader = req.headers.authorization;
+    const token = authheader && authheader.split(' ')[1];
     console.log(token)
     jwt.verify(token, process.env.JWT_SEC, (err, decoded) => {
 
@@ -53,7 +53,8 @@ router.post('/addproduct', verifyAdmin, async (req, res) => {
         isbn: req.body.isbn,
         isbn13: req.body.isbn13,
         dimensions: req.body.dimensions,
-        file: req.body.file,
+        pdffile: req.body.pdffile,
+        audiofile: req.body.audiofile,
         weight: req.body.weight,
         age: req.body.age,
         subtitle: req.body.subtitle,
@@ -90,7 +91,8 @@ router.post('/updateproduct', verifyAdmin, (req, res) => {
             product.isbn = req.body.isbn;
             product.isbn13 = req.body.isbn13;
             product.dimensions = req.body.dimensions;
-            product.file = req.body.file;
+            product.pdffile= req.body.pdffile;
+            product.audiofile= req.body.audiofile;
             product.weight = req.body.weight;
             product.age = req.body.age;
 
